@@ -1,7 +1,7 @@
 class Funcionario {
     constructor(idFuncionario, nombre, apellidos, fechaNacimiento, idSexo, foto, loginName, idDepartamento, password) {
         this.idFuncionario = idFuncionario;
-        this.nombre= nombre;
+        this.nombre = nombre;
         this.apellidos = apellidos;
         this.fechaNacimiento = fechaNacimiento;
         this.idSexo = idSexo;

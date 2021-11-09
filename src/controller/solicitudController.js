@@ -1,8 +1,7 @@
 const db_conection = require('../config/database.js');
-const Funcionario = require("../model/funcionario");
+const Solicitud = require("../model/solicitud");
 
 exports.getList = (req, res) => {
-
     db_conection.sql.connect(db_conection.config, function (err) {
 
         if (err) {
@@ -11,33 +10,7 @@ exports.getList = (req, res) => {
 
             db_conection.sql.query(
 
-                "EXEC getFuncionarios", function (err, result) {
-
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        if (!result.recordset[0]) {
-                            res.json(false);
-                        } else {
-                            res.json(result.recordset);
-                        }
-                    }
-                });
-        }
-
-    });
-};
-
-exports.getSimpleList = (req, res) => {
-    db_conection.sql.connect(db_conection.config, function (err) {
-
-        if (err) {
-            console.log(err);
-        } else {
-
-            db_conection.sql.query(
-
-                "EXEC getMainFuncionariosData", function (err, result) {
+                "EXEC getSolicitudes", function (err, result) {
 
                     if (err) {
                         console.log(err);
@@ -55,9 +28,9 @@ exports.getSimpleList = (req, res) => {
 };
 
 exports.add = (req, res) => {
-    let funcionario;
-    funcionario = new Funcionario(req.body.idFuncionario, req.body.nombre, req.body.apellidos, req.body.fechaNacimiento, req.body.idSexo,
-        req.body.foto, req.body.loginName, req.body.idDepartamento, req.body.password);
+    let solicitud;
+    solicitud = new Solicitud(req.body.idSolicitud, req.body.fechaInicio, req.body.fechaFin, req.body.documentoActaConstitutiva,
+        req.body.idUsuarioAplicativo, req.body.idResponsableTI, req.body.idResponsableUsuarioFinal);
 
     db_conection.sql.connect(db_conection.config, function (err) {
 
@@ -67,9 +40,9 @@ exports.add = (req, res) => {
 
             db_conection.sql.query(
 
-                "EXEC addFuncionario " + funcionario.idFuncionario + ",'" + funcionario.nombre + "','" + funcionario.apellidos + "','"
-                + funcionario.fechaNacimiento + "'," + funcionario.idSexo + ",'" + funcionario.foto + "','" + funcionario.loginName + "',"
-                + funcionario.idDepartamento + ",'" + funcionario.password + "'", function (err, result) {
+                "EXEC addSolicitud " + solicitud.idSolicitud + ",'" + solicitud.fechaInicio + "','" + solicitud.fechaFin + "','"
+                + solicitud.documentoActaConstitutiva + "'," + solicitud.idUsuarioAplicativo + "," + solicitud.idResponsableTI + "," 
+                + solicitud.idResponsableUsuarioFinal, function (err, result) {
 
                     if (err) {
                         console.log(err);
@@ -84,7 +57,7 @@ exports.add = (req, res) => {
 }
 
 exports.getById = (req, res) => {
-    let idFuncionario = req.params.idFuncionario;
+    let idSolicitud = req.params.idSolicitud;
 
     db_conection.sql.connect(db_conection.config, function (err) {
 
@@ -94,7 +67,7 @@ exports.getById = (req, res) => {
 
             db_conection.sql.query(
 
-                "EXEC getFuncionarioById " + idFuncionario, function (err, result) {
+                "EXEC getSolicitudById " + idSolicitud, function (err, result) {
 
                     if (err) {
                         res.json(false)
@@ -108,9 +81,9 @@ exports.getById = (req, res) => {
 }
 
 exports.update = (req, res) => {
-    let funcionario;
-    funcionario = new Funcionario(req.body.idFuncionario, req.body.nombre, req.body.apellidos, req.body.fechaNacimiento, req.body.idSexo,
-        req.body.foto, req.body.loginName, req.body.idDepartamento);
+    let solicitud;
+    solicitud = new Solicitud(req.body.idSolicitud, req.body.fechaInicio, req.body.fechaFin, req.body.documentoActaConstitutiva,
+        req.body.idUsuarioAplicativo, req.body.idResponsableTI, req.body.idResponsableUsuarioFinal);
 
     db_conection.sql.connect(db_conection.config, function (err) {
 
@@ -120,9 +93,9 @@ exports.update = (req, res) => {
 
             db_conection.sql.query(
 
-                "EXEC updateFuncionario " + funcionario.idFuncionario + ",'" + funcionario.nombre + "','" + funcionario.apellidos + "','"
-                + funcionario.fechaNacimiento + "'," + funcionario.idSexo + ",'" + funcionario.foto + "','" + funcionario.loginName + "',"
-                + funcionario.idDepartamento, function (err, result) {
+                "EXEC updateSolicitud " + solicitud.idSolicitud + ",'" + solicitud.fechaInicio + "','" + solicitud.fechaFin + "','"
+                + solicitud.documentoActaConstitutiva + "'," + solicitud.idUsuarioAplicativo + "," + solicitud.idResponsableTI + "," 
+                + solicitud.idResponsableUsuarioFinal, function (err, result) {
 
                     if (err) {
                         console.log(err);
@@ -137,7 +110,7 @@ exports.update = (req, res) => {
 }
 
 exports.delete = (req, res) => {
-    let idFuncionario = req.params.idFuncionario;
+    let idSolicitud = req.params.idSolicitud;
 
     db_conection.sql.connect(db_conection.config, function (err) {
 
@@ -147,7 +120,7 @@ exports.delete = (req, res) => {
 
             db_conection.sql.query(
 
-                "EXEC deleteFuncionario " + idFuncionario, function (err) {
+                "EXEC deleteSolicitud " + idSolicitud, function (err) {
 
                     if (err) {
                         res.json(false)
