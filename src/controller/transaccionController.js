@@ -1,5 +1,4 @@
 const db_conection = require('../config/database.js');
-const Departamento = require("../model/departamento");
 
 exports.getList = (req, res) => {
 
@@ -11,7 +10,7 @@ exports.getList = (req, res) => {
 
             db_conection.sql.query(
 
-                "EXEC getDepartamentos", function (err, result) {
+                "EXEC getTransacciones", function (err, result) {
 
                     if (err) {
                         console.log(err);
@@ -26,7 +25,7 @@ exports.getList = (req, res) => {
         }
 
     });
-}
+};
 
 exports.add = (req, res) => {
     db_conection.sql.connect(db_conection.config, function (err) {
@@ -37,7 +36,7 @@ exports.add = (req, res) => {
 
             db_conection.sql.query(
 
-                "EXEC addDepartamento '" + req.body.descripcion + "'", function (err, result) {
+                "EXEC addTransaccion '" + req.body.descripcion + "'", function (err, result) {
 
                     if (err) {
                         res.json(false)
@@ -51,7 +50,7 @@ exports.add = (req, res) => {
 }
 
 exports.getById = (req, res) => {
-    let idDepartamento = req.params.idDepartamento;
+    let idTransaccion = req.params.idTransaccion;
 
     db_conection.sql.connect(db_conection.config, function (err) {
 
@@ -61,7 +60,7 @@ exports.getById = (req, res) => {
 
             db_conection.sql.query(
 
-                "EXEC getDepartamentoById " + idDepartamento, function (err, result) {
+                "EXEC getTransaccionById " + idTransaccion, function (err, result) {
 
                     if (err) {
                         res.json(false)
@@ -75,7 +74,7 @@ exports.getById = (req, res) => {
 }
 
 exports.update = (req, res) => {
-    let departamento = {idDepartamento: req.body.idDepartamento, descripcion: req.body.descripcion}
+    let transaccion = {idTransaccion: req.body.idTransaccion, descripcion: req.body.descripcion}
     db_conection.sql.connect(db_conection.config, function (err) {
 
         if (err) {
@@ -84,7 +83,7 @@ exports.update = (req, res) => {
 
             db_conection.sql.query(
 
-                "EXEC updateDepartamento " + departamento.idDepartamento + ",'" + departamento.descripcion + "'", function (err, result) {
+                "EXEC updateTransaccion " + transaccion.idTransaccion + ",'" + transaccion.descripcion + "'", function (err, result) {
 
                     if (err) {
                         console.log(err);
@@ -99,7 +98,7 @@ exports.update = (req, res) => {
 }
 
 exports.delete = (req, res) => {
-    let idDepartamento = req.params.idDepartamento;
+    let idTransaccion = req.params.idTransaccion;
 
     db_conection.sql.connect(db_conection.config, function (err) {
 
@@ -109,7 +108,7 @@ exports.delete = (req, res) => {
 
             db_conection.sql.query(
 
-                "EXEC deleteDepartamento " + idDepartamento, function (err) {
+                "EXEC deleteTransaccion " + idTransaccion, function (err) {
 
                     if (err) {
                         res.json(false)

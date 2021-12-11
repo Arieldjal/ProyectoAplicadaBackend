@@ -22,17 +22,17 @@ exports.getList = (req, res) => {
                             var list = [];
 
                             for (var i = 0; i < result.recordset.length; i++) {
-                                list.push(new SolicitudSimple(result.recordset[i].IdSolicitud, result.recordset[i].FechaInicio, result.recordset[i].FechaFin))
+                                list.push(new SolicitudSimple(result.recordset[i].IdSolicitud, result.recordset[i].NombreProyecto, 
+                                    result.recordset[i].FechaInicio, result.recordset[i].FechaFin, result.recordset[i].Terminado))
                             }
 
                             db_conection.sql.query(
                                 "EXEC getAvances", function (err, result) {
-                                    
                                     //Agrega los avances a cada una de las solicitudes a las que pertenecen
                                     for (var i = 0; i < list.length; i++) {
                                         var avancesList = [];
+                                        
                                         for (var j = 0; j < result.recordset.length; j++) {
-
                                             if (result.recordset[j].IdSolicitud == list[i].IdSolicitud) {
                                                 avancesList.push(result.recordset[j]);
                                             } else {
@@ -111,7 +111,7 @@ exports.getById = (req, res) => {
 
 exports.update = (req, res) => {
     let avance;
-    avance = new Avance(req.body.idAvance, req.body.documento, req.body.idUsuarioAplicativo);
+    avance = new Avance(req.body.idAvance, req.body.documento, req.body.idUsuarioAplicativo, null, req.body.terminado);
 
     db_conection.sql.connect(db_conection.config, function (err) {
 
@@ -121,7 +121,7 @@ exports.update = (req, res) => {
 
             db_conection.sql.query(
 
-                "EXEC updateAvance " + avance.idAvance + ",'" + avance.documento + "'," + avance.idUsuarioAplicativo, function (err, result) {
+                "EXEC updateAvance " + avance.idAvance + ",'" + avance.documento + "'," + avance.idUsuarioAplicativo + ", "+ avance.terminado, function (err, result) {
 
                     if (err) {
                         console.log(err);
@@ -136,8 +136,8 @@ exports.update = (req, res) => {
 }
 
 exports.delete = (req, res) => {
-    
     let idAvance = req.params.idAvance;
+    let idFuncionario = req.params.idFuncionario;
     
     db_conection.sql.connect(db_conection.config, function (err) {
 
@@ -147,7 +147,7 @@ exports.delete = (req, res) => {
 
             db_conection.sql.query(
 
-                "EXEC deleteAvance " + idAvance, function (err) {
+                "EXEC deleteAvance " + idAvance + ", " + idFuncionario, function (err) {
 
                     if (err) {
                         res.json(false)
